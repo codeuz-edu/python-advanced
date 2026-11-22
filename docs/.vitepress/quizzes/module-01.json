@@ -1,0 +1,158 @@
+{
+  "module": "01 · Advanced Python",
+  "title": "Checkpoint: Advanced Python",
+  "intro": "Review decorators, the data model, context managers, async, memory, design patterns, threads and processes, and testing.",
+  "questions": [
+    {
+      "question": "What does city(\"Bukhara\") return?",
+      "code": "def bold(func):\n    return lambda text: \"<b>\" + func(text) + \"</b>\"\ndef italic(func):\n    return lambda text: \"<i>\" + func(text) + \"</i>\"\n@italic\n@bold\ndef city(name): return name",
+      "options": [
+        "\"<b><i>Bukhara</i></b>\"",
+        "\"<i>Bukhara</i>\"",
+        "\"<i><b>Bukhara</b></i>\"",
+        "\"<b>Bukhara</b>\""
+      ],
+      "answer": 2,
+      "explanation": "Stacked decorators are applied bottom-up, so city = italic(bold(city)). The top decorator, italic, is the outermost wrapper.",
+      "lesson": "closures-and-decorators"
+    },
+    {
+      "question": "Which line does @retry(times=3) above def fetch_rate() mean?",
+      "options": [
+        "fetch_rate = retry(fetch_rate, times=3)",
+        "fetch_rate = retry(times=3)(fetch_rate)",
+        "fetch_rate = retry(times=3)",
+        "fetch_rate = retry(fetch_rate)(times=3)"
+      ],
+      "answer": 1,
+      "explanation": "Python evaluates retry(times=3) and applies the decorator it returns to fetch_rate.",
+      "lesson": "closures-and-decorators"
+    },
+    {
+      "question": "What does this code print?",
+      "code": "class Settings:\n    language = \"uz\"\n    def __getattr__(self, name):\n        return f\"<{name}>\"\ns = Settings()\nprint(s.language, s.theme)",
+      "options": [
+        "uz <theme>",
+        "<language> <theme>",
+        "uz, then AttributeError",
+        "<language>, then AttributeError"
+      ],
+      "answer": 0,
+      "explanation": "__getattr__ is only a fallback: language is found on the class by normal lookup, and only the missing theme goes to __getattr__.",
+      "lesson": "python-data-model"
+    },
+    {
+      "question": "When does a parent class's __init_subclass__ run?",
+      "options": [
+        "Each time an instance of a subclass is created",
+        "Only when a subclass calls super().__init__()",
+        "The first time a method of the subclass is called",
+        "When the subclass itself is defined"
+      ],
+      "answer": 3,
+      "explanation": "During class creation, Python calls the immediate parent’s __init_subclass__ hook with the new class as cls.",
+      "lesson": "python-data-model"
+    },
+    {
+      "question": "What lines are printed, in order?",
+      "code": "from contextlib import ExitStack\nwith ExitStack() as stack:\n    stack.callback(print, \"first\")\n    stack.callback(print, \"second\")\n    print(\"body\")",
+      "options": [
+        "first, second, body",
+        "body, second, first",
+        "body, first, second",
+        "second, first, body"
+      ],
+      "answer": 1,
+      "explanation": "Callbacks run when the with block ends, not when they are registered, and ExitStack runs them in reverse order.",
+      "lesson": "context-managers-in-depth"
+    },
+    {
+      "question": "Which statement about a class-based context manager is true?",
+      "options": [
+        "__exit__ is still called if __enter__ raises an exception",
+        "If __exit__ returns None, the exception from the block is swallowed",
+        "If __exit__ returns a true value, the exception from the block is swallowed",
+        "__exit__ receives three Nones when the block raised an exception"
+      ],
+      "answer": 2,
+      "explanation": "If the block raises an exception, a truthy result from __exit__ suppresses it. A falsy result lets it propagate. Python passes three None arguments when there is no exception.",
+      "lesson": "context-managers-in-depth"
+    },
+    {
+      "question": "What does this code print?",
+      "code": "async def fetch(city):\n    return f\"{city}: 12,650 som\"\nasync def main():\n    result = fetch(\"Tashkent\")\n    print(type(result).__name__)\nawait main()",
+      "options": [
+        "coroutine",
+        "Tashkent: 12,650 som",
+        "str",
+        "NoneType"
+      ],
+      "answer": 0,
+      "explanation": "Calling this async function creates a coroutine object. Await or schedule it to run its body. An unawaited coroutine can produce a warning.",
+      "lesson": "async-await"
+    },
+    {
+      "question": "What does this code print?",
+      "code": "import asyncio\nasync def fetch(city, delay):\n    await asyncio.sleep(delay)\n    return city\nasync def main():\n    print(await asyncio.gather(fetch(\"Bukhara\", 0.3), fetch(\"Tashkent\", 0.1)))\nawait main()",
+      "options": [
+        "['Tashkent', 'Bukhara']",
+        "Tashkent",
+        "It depends on which request finishes first",
+        "['Bukhara', 'Tashkent']"
+      ],
+      "answer": 3,
+      "explanation": "The Tashkent request has the shorter delay. When both succeed, gather returns the results in the order of the arguments.",
+      "lesson": "async-await"
+    },
+    {
+      "question": "What does this code print?",
+      "code": "import sys\nshort = [letter for letter in \"abc\"]\nlong = [letter * 10_000 for letter in \"abc\"]\nprint(sys.getsizeof(short) == sys.getsizeof(long))",
+      "options": [
+        "False",
+        "True",
+        "TypeError",
+        "30000"
+      ],
+      "answer": 1,
+      "explanation": "sys.getsizeof measures only the list object itself. A list stores references to its items, so the size of the strings is not included.",
+      "lesson": "memory-and-performance"
+    },
+    {
+      "question": "What does this code print?",
+      "code": "class EventEmitter:\n    listeners = []\n    def subscribe(self, callback):\n        self.listeners.append(callback)\nshop, bank = EventEmitter(), EventEmitter()\nshop.subscribe(print)\nprint(len(bank.listeners))",
+      "options": [
+        "0",
+        "AttributeError",
+        "1",
+        "2"
+      ],
+      "answer": 2,
+      "explanation": "listeners is a class attribute, so shop and bank append to the same list. Create the list in __init__ with self.listeners = [] to give each emitter its own.",
+      "lesson": "design-patterns"
+    },
+    {
+      "question": "A pure Python function counts primes. On conventional CPython, which of these tools can run two large inputs in parallel on separate CPU cores?",
+      "options": [
+        "ProcessPoolExecutor",
+        "ThreadPoolExecutor",
+        "asyncio.gather",
+        "Two threading.Thread objects with a Lock"
+      ],
+      "answer": 0,
+      "explanation": "A conventional CPython interpreter has a GIL, so two threads in one interpreter cannot execute this Python calculation in parallel. Two processes can use two CPU cores.",
+      "lesson": "threads-and-processes"
+    },
+    {
+      "question": "prices.py does from rates import fetch_rate and then calls fetch_rate(). In a test of prices.price_in_som, which patch replaces the rate lookup?",
+      "options": [
+        "patch(\"rates.fetch_rate\")",
+        "patch(\"fetch_rate\")",
+        "patch(\"rates.prices.fetch_rate\")",
+        "patch(\"prices.fetch_rate\")"
+      ],
+      "answer": 3,
+      "explanation": "The import creates a second name, fetch_rate, inside prices. Patch the name where the code looks it up, not where it is defined.",
+      "lesson": "testing-in-depth"
+    }
+  ]
+}

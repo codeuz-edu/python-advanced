@@ -1,0 +1,16 @@
+# Node and VitePress
+node_modules/
+dist/
+docs/.vitepress/cache/
+
+# Copied into the site by scripts/copy-runtime.mjs
+docs/public/pyodide/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# OS
+.DS_Store

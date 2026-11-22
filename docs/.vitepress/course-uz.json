@@ -1,0 +1,72 @@
+[
+ {
+  "slug": "closures-and-decorators",
+  "title": "Closure va dekoratorlar",
+  "group": "01 · Advanced Python"
+ },
+ {
+  "slug": "python-data-model",
+  "title": "Python maʼlumot modeli",
+  "group": "01 · Advanced Python"
+ },
+ {
+  "slug": "context-managers-in-depth",
+  "title": "Kontekst menejerlarini çuqurroq örganiş",
+  "group": "01 · Advanced Python"
+ },
+ {
+  "slug": "async-await",
+  "title": "Async va await",
+  "group": "01 · Advanced Python"
+ },
+ {
+  "slug": "memory-and-performance",
+  "title": "Xotira va samaradorlik",
+  "group": "01 · Advanced Python"
+ },
+ {
+  "slug": "design-patterns",
+  "title": "Python tilida loyihalaş andozalari",
+  "group": "01 · Advanced Python"
+ },
+ {
+  "slug": "threads-and-processes",
+  "title": "Oqimlar va jarayonlar",
+  "group": "01 · Advanced Python"
+ },
+ {
+  "slug": "testing-in-depth",
+  "title": "Testlaşni çuqurroq örganiş",
+  "group": "01 · Advanced Python"
+ },
+ {
+  "slug": "advanced-project",
+  "title": "Loyiha: Log konveyeri",
+  "group": "01 · Advanced Python"
+ },
+ {
+  "slug": "single-responsibility",
+  "title": "Single Responsibility tamoyili",
+  "group": "02 · SOLID tamoyillari"
+ },
+ {
+  "slug": "open-closed",
+  "title": "Open/Closed tamoyili",
+  "group": "02 · SOLID tamoyillari"
+ },
+ {
+  "slug": "liskov-substitution",
+  "title": "Liskov Substitution tamoyili",
+  "group": "02 · SOLID tamoyillari"
+ },
+ {
+  "slug": "interface-segregation",
+  "title": "Interface Segregation tamoyili",
+  "group": "02 · SOLID tamoyillari"
+ },
+ {
+  "slug": "dependency-inversion",
+  "title": "Dependency Inversion tamoyili",
+  "group": "02 · SOLID tamoyillari"
+ }
+]

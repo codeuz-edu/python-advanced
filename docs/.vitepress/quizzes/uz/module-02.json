@@ -1,0 +1,157 @@
+{
+  "module": "02 · SOLID tamoyillari",
+  "title": "Nazorat: SOLID tamoyillari",
+  "intro": "Python klasslari, interfeyslari va boğliqliklari misolida beşta SOLID tamoyilini takrorlang.",
+  "questions": [
+    {
+      "question": "Bu Order klassining özgariş sabablari qaysilar?",
+      "code": "class Order:\n    def __init__(self, items):\n        self.items = items\n        self.total_price = self.calculate_total()\n        self.total_price = self.apply_discount(self.total_price)\n        self.save()\n    def calculate_total(self): ...\n    def apply_discount(self, total): ...\n    def save(self): ...",
+      "options": [
+        "Faqat bitta: undagi hamma narsa buyurtmalar haqida",
+        "Uçta: narx formulasi, çegirma qoidalari va saqlaş",
+        "Uning __init__ metodi, çunki u boşqa metodlarni çaqiradi",
+        "Heç qanday, agar klassning testlari bölsa"
+      ],
+      "answer": 1,
+      "explanation": "Narx, çegirma va saqlaş turli sabab bilan özgaradi. Bu misolda ularning har biriga alohida klass beramiz.",
+      "lesson": "single-responsibility"
+    },
+    {
+      "question": "SRP böyiça qayta tuzilgandan keyin dökon buyurtmalarni maʼlumotlar bazasidan CSV faylga köçiradi. Qaysi klass özgaradi?",
+      "options": [
+        "Order",
+        "PriceCalculator",
+        "OrderRepository",
+        "DiscountApplier"
+      ],
+      "answer": 2,
+      "explanation": "Buyurtmani saqlaş OrderRepository ga tegişli. Saqlaş usuli özgarganda, özgariş şu klassga boradi.",
+      "lesson": "single-responsibility"
+    },
+    {
+      "question": "Triangle qöşiş uçun nimani özgartiriş kerak?",
+      "code": "class AreaCalculator:\n    @staticmethod\n    def calculate(shape):\n        if isinstance(shape, Rectangle):\n            return shape.width * shape.height\n        if isinstance(shape, Circle):\n            return math.pi * shape.radius ** 2\n        raise TypeError(f\"Nomaʼlum şakl: {type(shape).__name__}\")",
+      "options": [
+        "Heç narsani: Triangle ga faqat area() metodi kerak",
+        "Faqat TypeError xabarini",
+        "Rectangle va Circle ni, ularga avval umumiy asosiy klass kerak",
+        "AreaCalculator.calculate. Unga yana bitta isinstance şarti kerak."
+      ],
+      "answer": 3,
+      "explanation": "Hisoblagiç turlarni alohida tekşiradi. Bu variantda uçburçak uçun calculate ga yana bitta şart kerak.",
+      "lesson": "open-closed"
+    },
+    {
+      "question": "Open/Closed tamoyiliga qaysi fikr mos keladi?",
+      "options": [
+        "Yangi xatti-harakatni alohida kod, masalan, voris klass yozib qöşiş mumkin.",
+        "Klass çiqarilgandan keyin unga yangi bola klasslar qöşib bölmaydi, şunda xatti-harakati özgarmaydi",
+        "Klassning har bir atributi yopiq (private) bölişi kerak, şunda boşqa kod uni özgartira olmaydi",
+        "Klassni boşqa dasturçilar emas, faqat uning muallifi özgartira oladi"
+      ],
+      "answer": 0,
+      "explanation": "Shape area() ni belgilasa, Triangle şu metodni yozadi. Oldingi klasslarni tahrirlaşga hojat qolmaydi.",
+      "lesson": "open-closed"
+    },
+    {
+      "question": "Bu kod nimani çop etadi?",
+      "code": "class Rectangle:\n    def __init__(self, width, height):\n        self._width, self._height = width, height\n    def set_width(self, width): self._width = width\n    def set_height(self, height): self._height = height\n    def area(self): return self._width * self._height\nclass Square(Rectangle):\n    def __init__(self, side): super().__init__(side, side)\n    def set_width(self, width): self._width = self._height = width\n    def set_height(self, height): self._width = self._height = height\nsq = Square(5)\nsq.set_width(5)\nsq.set_height(10)\nprint(sq.area())",
+      "options": [
+        "50",
+        "25",
+        "100",
+        "AssertionError"
+      ],
+      "answer": 2,
+      "explanation": "Square.set_height kenglikni ham özgartiradi, şuning uçun yuza 10 × 10 böladi. Rectangle uçun yozilgan kod 50 ni kutadi.",
+      "lesson": "liskov-substitution"
+    },
+    {
+      "question": "Faqat area() kerak bölgan kod Square va Rectangle bilan bir xil işlaşi uçun qaysi tuzilma mos?",
+      "options": [
+        "Rectangle ni Square dan meros oladigan qiliş",
+        "area() metodi bor umumiy Shape klassidan ikkalasini ham meros oldiriş.",
+        "resize_rectangle boşida isinstance(rect, Square) ni tekşiriş",
+        "Square ning set_width va set_height metodlarida NotImplementedError çaqiriş"
+      ],
+      "answer": 1,
+      "explanation": "Faqat Shape.area() ga tayangan kod ikkala şaklni ham qabul qiladi. Rectangle ning mustaqil sozlagiçlariga tayangan kod esa Square bilan işlamaydi.",
+      "lesson": "liskov-substitution"
+    },
+    {
+      "question": "Robot work(), eat() va sleep() metodlari bor Worker ABC dan meros oladi, uning eat() va sleep() metodlari esa faqat NotImplementedError çaqiradi. Muammo nimada?",
+      "options": [
+        "Robot bajara olmaydigan metodlarni yozişga majbur. Worker ni kiçikroq interfeyslarga ajratiş kerak.",
+        "Worker abstrakt klass bölmasligi kerak, çunki ABC da faqat bitta abstrakt metod bölişi mumkin",
+        "Robot eat() va sleep() ni allaqaçon implement qilgan Human dan meros olişi kerak",
+        "eat() va sleep() xato çaqiriş örniga None qaytarişi kerak, şunda çaqiruvçilar yiqilmaydi"
+      ],
+      "answer": 0,
+      "explanation": "Robot bajara olmaydigan amallarni yozişga majbur. İşlaş, ovqatlaniş va uxlaşni alohida interfeyslarga ajrating. Robotga faqat Workable kerak.",
+      "lesson": "interface-segregation"
+    },
+    {
+      "question": "assign_task(worker) faqat worker.work() ni çaqiradi. Human va Robot ni qabul qiladigan parametrning qaysi turi kamroq metod talab qiladi?",
+      "options": [
+        "def assign_task(worker: Human) -> None",
+        "def assign_task(worker: Human | Robot) -> None",
+        "def assign_task(worker: Eatable) -> None",
+        "def assign_task(worker: Workable) -> None"
+      ],
+      "answer": 3,
+      "explanation": "Funksiyaga faqat work() kerak. Workable ni qöllaydigan dron ham şu funksiyaga mos keladi. Human | Robot yozuvida esa yangi turni alohida qöşişga töğri kelardi.",
+      "lesson": "interface-segregation"
+    },
+    {
+      "question": "Bu kod nimani çop etadi?",
+      "code": "from collections.abc import Iterable, Sized\nclass Queue:\n    def __len__(self):\n        return 2\nq = Queue()\nprint(isinstance(q, Sized), isinstance(q, Iterable))",
+      "options": [
+        "True True",
+        "False False",
+        "True False",
+        "TypeError"
+      ],
+      "answer": 2,
+      "explanation": "Sized __len__ metodiga, Iterable esa __iter__ metodiga qaraydi. Misoldagi Queue da faqat __len__ bor.",
+      "lesson": "interface-segregation"
+    },
+    {
+      "question": "Nega bu yerda process() ni haqiqiy kartadan pul yeçmasdan test qiliş qiyin?",
+      "code": "class PaymentProcessor:\n    def __init__(self):\n        self.payment = CreditCardPayment()\n    def process(self, amount):\n        self.payment.pay(amount)",
+      "options": [
+        "PaymentProcessor CreditCardPayment ni özi yaratadi, şuning uçun test unga soxta obyekt uzata olmaydi",
+        "process() None qaytaradi, şuning uçun testda soliştiradigan narsa yöq",
+        "CreditCardPayment ning asosiy klassi yöq, şuning uçun test uni import qila olmaydi",
+        "amount float, şuning uçun test uni aniq soliştira olmaydi"
+      ],
+      "answer": 0,
+      "explanation": "Konstruktor xizmatni özi yaratadi. Test CreditCardPayment nomini kod qidiradigan joyda almaştira oladi. Konstruktor obyektni argument qilib olsa, test unga summani qayd etadigan obyekt beradi.",
+      "lesson": "dependency-inversion"
+    },
+    {
+      "question": "Bu kod işga tuşganda nima böladi?",
+      "code": "class CreditCardPayment:\n    def pay(self, amount):\n        print(f\"${amount:.2f} kredit karta bilan tölanmoqda\")\nclass PaymentProcessor:\n    def __init__(self, payment):\n        self.payment = payment\n    def process(self, amount):\n        self.payment.pay(amount)\nPaymentProcessor(CreditCardPayment).process(150.00)",
+      "options": [
+        "$150.00 kredit karta bilan tölanmoqda",
+        "TypeError: CreditCardPayment.pay() missing 1 required positional argument: 'amount'",
+        "Heç narsa çop etilmaydi",
+        "AttributeError: type object 'CreditCardPayment' has no attribute 'pay'"
+      ],
+      "answer": 1,
+      "explanation": "Obyekt örniga klass uzatilgan. pay() metodi klass orqali çaqirilganda, 150.00 qiymati self argumentiga ketadi. PaymentProcessor(CreditCardPayment()) yordamida tayyor obyekt uzating.",
+      "lesson": "dependency-inversion"
+    },
+    {
+      "question": "Dependency Inversion tamoyili haqidagi qaysi fikr töğri?",
+      "options": [
+        "CreditCardPayment kabi quyi darajadagi klasslar ulardan foydalanadigan yuqori darajadagi klasslarni yaratişi kerak",
+        "Tamoyilni qöllaşdan oldin Pythonga dependency injection freymvorki kerak",
+        "Har bir klassga, hatto yagona implementatsiyasi bölsa ham, abstrakt asosiy klass kerak",
+        "PaymentProcessor ham, tölov klasslari ham Payment abstraktsiyasiga boğliq"
+      ],
+      "answer": 3,
+      "explanation": "Protsessor umumiy tölov amaliga tayanadi. Har bir tölov klassi şu amalni bajaradi. Qaysi klass obyekti kerakligini çaqiruvçi tanlaydi.",
+      "lesson": "dependency-inversion"
+    }
+  ]
+}

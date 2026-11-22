@@ -1,0 +1,157 @@
+{
+  "module": "02 · SOLID Principles",
+  "title": "Checkpoint: SOLID Principles",
+  "intro": "Review the five SOLID principles through changes to Python classes, interfaces, and dependencies.",
+  "questions": [
+    {
+      "question": "What are the reasons to change for this Order class?",
+      "code": "class Order:\n    def __init__(self, items):\n        self.items = items\n        self.total_price = self.calculate_total()\n        self.total_price = self.apply_discount(self.total_price)\n        self.save()\n    def calculate_total(self): ...\n    def apply_discount(self, total): ...\n    def save(self): ...",
+      "options": [
+        "Only one: everything in it is about orders",
+        "Three: the pricing formula, the discount rules and the storage",
+        "Its __init__ method, because it calls the other methods",
+        "None, as long as the class has tests"
+      ],
+      "answer": 1,
+      "explanation": "Pricing, discounts and saving each change for their own reasons, often at the request of different people. SRP gives each one its own class: PriceCalculator, DiscountApplier and OrderRepository.",
+      "lesson": "single-responsibility"
+    },
+    {
+      "question": "After the SRP refactoring, the shop moves its orders from a database to a CSV file. Which class changes?",
+      "options": [
+        "Order",
+        "PriceCalculator",
+        "OrderRepository",
+        "DiscountApplier"
+      ],
+      "answer": 2,
+      "explanation": "Saving orders is OrderRepository's one job, so a new storage backend changes only that class. Order, PriceCalculator and DiscountApplier stay as they are.",
+      "lesson": "single-responsibility"
+    },
+    {
+      "question": "What has to change to support a Triangle?",
+      "code": "class AreaCalculator:\n    @staticmethod\n    def calculate(shape):\n        if isinstance(shape, Rectangle):\n            return shape.width * shape.height\n        if isinstance(shape, Circle):\n            return math.pi * shape.radius ** 2\n        raise TypeError(f\"Unknown shape: {type(shape).__name__}\")",
+      "options": [
+        "Nothing: Triangle only needs an area() method",
+        "Only the TypeError message",
+        "Rectangle and Circle, which must get a common base class first",
+        "AreaCalculator.calculate, which needs a new isinstance branch"
+      ],
+      "answer": 3,
+      "explanation": "The calculator checks each supported type directly. Adding a triangle to this version requires another branch in calculate.",
+      "lesson": "open-closed"
+    },
+    {
+      "question": "Which statement describes the Open/Closed Principle?",
+      "options": [
+        "You add new behavior by adding new code, such as a subclass, without editing code that already works",
+        "A class must not get new subclasses once it is released, so its behavior stays fixed",
+        "Every attribute of a class should be private, so other code cannot modify it",
+        "A class may be modified only by its original author, never by other developers"
+      ],
+      "answer": 0,
+      "explanation": "Open for extension, closed for modification: with a Shape base class that defines area(), a Triangle is one new subclass and no existing class changes.",
+      "lesson": "open-closed"
+    },
+    {
+      "question": "What does this code print?",
+      "code": "class Rectangle:\n    def __init__(self, width, height):\n        self._width, self._height = width, height\n    def set_width(self, width): self._width = width\n    def set_height(self, height): self._height = height\n    def area(self): return self._width * self._height\nclass Square(Rectangle):\n    def __init__(self, side): super().__init__(side, side)\n    def set_width(self, width): self._width = self._height = width\n    def set_height(self, height): self._width = self._height = height\nsq = Square(5)\nsq.set_width(5)\nsq.set_height(10)\nprint(sq.area())",
+      "options": [
+        "50",
+        "25",
+        "100",
+        "AssertionError"
+      ],
+      "answer": 2,
+      "explanation": "Square.set_height also changes the width, so the area is 10 * 10. Code written for a Rectangle expects 50, so a Square cannot stand in for a Rectangle.",
+      "lesson": "liskov-substitution"
+    },
+    {
+      "question": "Which design lets callers that only need area() use either Square or Rectangle?",
+      "options": [
+        "Make Rectangle inherit from Square instead",
+        "Make both inherit from a Shape abstraction with area(), and neither from the other",
+        "Check isinstance(rect, Square) at the start of resize_rectangle",
+        "Make Square raise NotImplementedError in set_width and set_height"
+      ],
+      "answer": 1,
+      "explanation": "Code that relies only on Shape.area() can use either shape. Code that requires Rectangle’s independent setters still cannot use Square.",
+      "lesson": "liskov-substitution"
+    },
+    {
+      "question": "Robot inherits from a Worker ABC with work(), eat() and sleep(), and its eat() and sleep() only raise NotImplementedError. What is the problem?",
+      "options": [
+        "Robot is forced to implement methods it does not use, so Worker should be split into smaller interfaces",
+        "Worker should not be an abstract class, because an ABC may have only one abstract method",
+        "Robot should inherit from Human, which already implements eat() and sleep()",
+        "eat() and sleep() should return None instead of raising, so callers do not crash"
+      ],
+      "answer": 0,
+      "explanation": "The robot is required to provide operations it cannot honor. Give work, eating, and sleeping separate interfaces. Robot only needs Workable.",
+      "lesson": "interface-segregation"
+    },
+    {
+      "question": "assign_task(worker) only calls worker.work(). Which signature depends on the least while still accepting both Human and Robot?",
+      "options": [
+        "def assign_task(worker: Human) -> None",
+        "def assign_task(worker: Human | Robot) -> None",
+        "def assign_task(worker: Eatable) -> None",
+        "def assign_task(worker: Workable) -> None"
+      ],
+      "answer": 3,
+      "explanation": "A function should ask only for the methods it calls. With Workable, a new kind of worker such as a drone works with no change, while Human | Robot would need editing.",
+      "lesson": "interface-segregation"
+    },
+    {
+      "question": "What does this code print?",
+      "code": "from collections.abc import Iterable, Sized\nclass Queue:\n    def __len__(self):\n        return 2\nq = Queue()\nprint(isinstance(q, Sized), isinstance(q, Iterable))",
+      "options": [
+        "True True",
+        "False False",
+        "True False",
+        "TypeError"
+      ],
+      "answer": 2,
+      "explanation": "The ABCs in collections.abc are small interfaces: Sized needs only __len__, Iterable only __iter__. Queue has just __len__, so it is Sized but not Iterable.",
+      "lesson": "interface-segregation"
+    },
+    {
+      "question": "Why is process() hard to test without charging a real card here?",
+      "code": "class PaymentProcessor:\n    def __init__(self):\n        self.payment = CreditCardPayment()\n    def process(self, amount):\n        self.payment.pay(amount)",
+      "options": [
+        "PaymentProcessor creates CreditCardPayment itself, so a test cannot pass in a fake",
+        "process() returns None, so a test has nothing to compare against",
+        "CreditCardPayment has no base class, so a test cannot import it",
+        "amount is a float, so a test cannot compare it exactly"
+      ],
+      "answer": 0,
+      "explanation": "The constructor creates the service. A test of this version can patch CreditCardPayment where it is looked up. With a constructor parameter, it can supply an object that records the amount.",
+      "lesson": "dependency-inversion"
+    },
+    {
+      "question": "What happens when this code runs?",
+      "code": "class CreditCardPayment:\n    def pay(self, amount):\n        print(f\"Paying ${amount:.2f} with credit card\")\nclass PaymentProcessor:\n    def __init__(self, payment):\n        self.payment = payment\n    def process(self, amount):\n        self.payment.pay(amount)\nPaymentProcessor(CreditCardPayment).process(150.00)",
+      "options": [
+        "Paying $150.00 with credit card",
+        "TypeError: CreditCardPayment.pay() missing 1 required positional argument: 'amount'",
+        "Nothing is printed",
+        "AttributeError: type object 'CreditCardPayment' has no attribute 'pay'"
+      ],
+      "answer": 1,
+      "explanation": "The class was passed instead of an object, so pay() is called on the class and 150.00 fills the self slot. Inject an object: PaymentProcessor(CreditCardPayment()).",
+      "lesson": "dependency-inversion"
+    },
+    {
+      "question": "Which statement about the Dependency Inversion Principle is true?",
+      "options": [
+        "Low-level classes such as CreditCardPayment should create the high-level classes that use them",
+        "Python needs a dependency injection framework before the principle can be applied",
+        "Every class needs an abstract base class, even when it has only one implementation",
+        "PaymentProcessor and the payment classes both depend on the Payment abstraction"
+      ],
+      "answer": 3,
+      "explanation": "The processor depends on the payment operation. The concrete payment classes implement it. A caller chooses which implementation to pass in.",
+      "lesson": "dependency-inversion"
+    }
+  ]
+}

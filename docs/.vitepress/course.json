@@ -1,0 +1,72 @@
+[
+ {
+  "slug": "closures-and-decorators",
+  "title": "Closures and Decorators",
+  "group": "01 · Advanced Python"
+ },
+ {
+  "slug": "python-data-model",
+  "title": "The Python Data Model",
+  "group": "01 · Advanced Python"
+ },
+ {
+  "slug": "context-managers-in-depth",
+  "title": "Context Managers in Depth",
+  "group": "01 · Advanced Python"
+ },
+ {
+  "slug": "async-await",
+  "title": "Async and await",
+  "group": "01 · Advanced Python"
+ },
+ {
+  "slug": "memory-and-performance",
+  "title": "Memory and Performance",
+  "group": "01 · Advanced Python"
+ },
+ {
+  "slug": "design-patterns",
+  "title": "Pythonic Design Patterns",
+  "group": "01 · Advanced Python"
+ },
+ {
+  "slug": "threads-and-processes",
+  "title": "Threads and Processes",
+  "group": "01 · Advanced Python"
+ },
+ {
+  "slug": "testing-in-depth",
+  "title": "Testing in Depth",
+  "group": "01 · Advanced Python"
+ },
+ {
+  "slug": "advanced-project",
+  "title": "Project: Log Pipeline",
+  "group": "01 · Advanced Python"
+ },
+ {
+  "slug": "single-responsibility",
+  "title": "Single Responsibility Principle",
+  "group": "02 · SOLID Principles"
+ },
+ {
+  "slug": "open-closed",
+  "title": "Open/Closed Principle",
+  "group": "02 · SOLID Principles"
+ },
+ {
+  "slug": "liskov-substitution",
+  "title": "Liskov Substitution Principle",
+  "group": "02 · SOLID Principles"
+ },
+ {
+  "slug": "interface-segregation",
+  "title": "Interface Segregation Principle",
+  "group": "02 · SOLID Principles"
+ },
+ {
+  "slug": "dependency-inversion",
+  "title": "Dependency Inversion Principle",
+  "group": "02 · SOLID Principles"
+ }
+]
